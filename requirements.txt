@@ -1,0 +1,5 @@
+psutil
+pingparsing
+ping3
+speedtest-cli
+scapy
