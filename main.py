@@ -52,7 +52,7 @@ def main():
                 break
             else:
                 logger.warning(f"Azione non riconosciuta: {action}")
-        except Exception as e:
+        except Exception:
             logger.error("Errore critico nel main loop.", exc_info=True)
             print("Errore critico! Vedi log per dettagli.")
             sys.exit(1)
