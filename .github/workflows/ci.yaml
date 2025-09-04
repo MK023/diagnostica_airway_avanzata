@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main, master ]
 
+permissions:
+  contents: read  # solo lettura del repository, sufficiente per la CI
+  # Se in futuro vuoi commentare su PR o Issues, aggiungi: issues: write oppure pull-requests: write
+
 jobs:
   build-test-lint:
     runs-on: ubuntu-latest
@@ -53,3 +57,4 @@ jobs:
         with:
           name: coverage-report
           path: htmlcov/
+          
