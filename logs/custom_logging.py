@@ -43,11 +43,11 @@ class LogManager:
     def info(self, msg):
         self.logger.info(msg)
 
-    def warning(self, msg):
-        self.logger.warning(msg)
+    def warning(self, msg, *args, **kwargs):
+        self.logger.warning(msg, *args, **kwargs)
 
     def error(self, msg, exc_info=False):
         self.logger.error(msg, exc_info=exc_info)
 
-    def critical(self, msg):
-        self.logger.critical(msg)
+    def critical(self, msg, *args, **kwargs):
+        self.logger.critical(msg, *args, **kwargs)
