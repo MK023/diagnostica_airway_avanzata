@@ -7,9 +7,11 @@ Modulo di diagnostica DNS sicuro e robusto.
 - Gestione errori granulare
 """
 
+import socket
+
 from logs.custom_logging import LogManager
 from security.security import validate_address
-import socket
+
 
 def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
     """
@@ -39,6 +41,7 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
         # Check record DNS (A, AAAA, MX, TXT, ecc)
         try:
             import dns.resolver
+
             rtlist = record_types if record_types else ["A", "AAAA", "MX", "TXT"]
             resolver = dns.resolver.Resolver()
             resolver.timeout = dns_timeout
