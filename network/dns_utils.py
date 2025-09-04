@@ -1,4 +1,4 @@
-# network/dns.py - Diagnostica DNS e sicurezza.
+
 """
 Modulo di diagnostica DNS sicuro e robusto.
 - Risoluzione nome, reverse, check record (A, AAAA, MX, TXT)
@@ -27,17 +27,17 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
 
     logger.info(f"Avvio diagnostica DNS per {address}")
     try:
-        # Risoluzione nome → IP
+        # Risoluzione nome -> IP
         ip = socket.gethostbyname(address)
-        logger.info(f"Risoluzione {address} → {ip}")
-        print(f"{address} → {ip}")
+        logger.info(f"Risoluzione {address} -> {ip}")
+        print(f"{address} -> {ip}")
         # Reverse DNS
         try:
             hostname, _, _ = socket.gethostbyaddr(ip)
-            logger.info(f"Reverse {ip} → {hostname}")
-            print(f"Reverse: {ip} → {hostname}")
+            logger.info(f"Reverse {ip} -> {hostname}")
+            print(f"Reverse: {ip} -> {hostname}")
         except Exception as e:
-            logger.warning(f"Reverse DNS non disponibile: {e}", exc_info=True)
+            logger.warning(f"Reverse DNS non disponibile: {e}", exc_info=False)
         # Check record DNS (A, AAAA, MX, TXT, ecc)
         try:
             import dns.resolver
@@ -48,14 +48,19 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
             for rtype in rtlist:
                 try:
                     answers = resolver.resolve(address, rtype)
-                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}")  # type: ignore
-                    print(f"{rtype}: {[str(a) for a in answers]}")  # type: ignore
+                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}") # type: ignore
+                    print(f"{rtype}: {[str(a) for a in answers]}") # type: ignore
+                except dns.resolver.NXDOMAIN:
+                    logger.warning(f"Record {rtype} non trovato: il nome DNS non esiste: {address}", exc_info=False)
                 except Exception as e:
-                    logger.warning(f"Record {rtype} non trovato: {e}", exc_info=True)
+                    logger.warning(f"Record {rtype} errore: {e}", exc_info=False)
         except ImportError:
-            logger.warning("Modulo dnspython non disponibile per query avanzate.")
+            logger.warning("Modulo dnspython non disponibile per query avanzate.", exc_info=False)
             print("ERRORE: modulo dnspython non disponibile per query avanzate.")
     except Exception as e:
-        logger.error(f"Errore DNS: {e}", exc_info=True)
+        logger.error(f"Errore DNS: {e}", exc_info=False)
         print("ERRORE: DNS fallito, vedi log.")
     logger.info("Fine diagnostica DNS.")
+    print("Diagnostica DNS completata.")
+    logger.info("Fine diagnostica DNS.")
+    
