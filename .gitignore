@@ -12,6 +12,8 @@ build/
 dist/
 *.egg-info/
 .eggs/
+*.whl
+*.tar.gz
 
 # Installer logs
 pip-log.txt
@@ -27,11 +29,14 @@ nosetests.xml
 coverage.xml
 *.cover
 .pytest_cache/
+test-results/
+junit-*.xml
 
-# MyPy and Pylint
+# MyPy, Pylint, Bandit
 .mypy_cache/
 .dmypy.json
 .pylint.d/
+.bandit/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -41,9 +46,23 @@ coverage.xml
 .idea/
 *.sublime-workspace
 *.sublime-project
+*.code-workspace
 
 # Mac OS
 .DS_Store
 
 # Windows
 Thumbs.db
+desktop.ini
+
+# Pre-commit and CI artifacts
+.pre-commit-config.yaml~
+.pre-commit/
+*.bak
+
+# YAML/INI auto-generated files
+*.tmp
+*.log
+*.ini~
+*.yaml~
+*.yml~
