@@ -9,6 +9,7 @@ Carica e gestisce il file di configurazione .ini:
 import configparser
 import os
 
+
 class ConfigManager:
     def __init__(self, ini_path):
         self.config = configparser.ConfigParser()

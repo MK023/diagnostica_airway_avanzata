@@ -10,26 +10,27 @@ Gestisce il flusso principale:
 """
 import sys
 
+from cli.cli import CliMenu
 from config.config_manager import ConfigManager
 from logs.custom_logging import LogManager
 from os_manager.os_manager import OSManager
-from cli.cli import CliMenu
+
 
 def main():
     # Carica configurazione
     config = ConfigManager("config.ini")
-    
+
     # Inizializza logging evoluto
     logger = LogManager(config)
-    
+
     # Rileva OS e gestisce permessi/admin
     os_manager = OSManager(logger)
     os_type = os_manager.detect_os()
     os_manager.require_admin_if_needed()
-    
+
     # Mostra CLI e gestisce scelta utente
     cli = CliMenu(config, logger, os_type)
-    
+
     while True:
         try:
             action = cli.show_menu()
@@ -55,6 +56,7 @@ def main():
             logger.error("Errore critico nel main loop.", exc_info=True)
             print("Errore critico! Vedi log per dettagli.")
             sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

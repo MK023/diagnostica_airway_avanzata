@@ -9,8 +9,9 @@ Modulo di diagnostica ICMP Ping sicuro e robusto.
 - Validazione e sanitizzazione input per sicurezza
 """
 
-import time
 import os
+import time
+
 from logs.custom_logging import LogManager
 from security.security import validate_address
 
@@ -25,9 +26,10 @@ except ImportError:
     ping3_ping = None
 
 try:
-    from scapy.all import sr1, IP, ICMP
+    from scapy.all import ICMP, IP, sr1
 except ImportError:
     sr1 = IP = ICMP = None
+
 
 def write_csv(csvfile, header, rows):
     """
@@ -39,17 +41,27 @@ def write_csv(csvfile, header, rows):
     if not isinstance(csvfile, str) or ".." in csvfile or csvfile.startswith("/"):
         raise ValueError("Path CSV non valido o potenzialmente rischioso.")
     write_header = not os.path.isfile(csvfile) or os.path.getsize(csvfile) == 0
-    with open(csvfile, mode='a', newline='', encoding='utf-8') as f:
+    with open(csvfile, mode="a", newline="", encoding="utf-8") as f:
         import csv
+
         writer = csv.writer(f)
         if write_header:
             writer.writerow(header)
         for row in rows:
             # Protezione: nessun campo deve contenere newline o caratteri di escape
-            safe_row = [str(x).replace('\n', ' ').replace('\r', '') for x in row]
+            safe_row = [str(x).replace("\n", " ").replace("\r", "") for x in row]
             writer.writerow(safe_row)
 
-def run_ping_diag(address, logger: LogManager, os_type: str, advanced=False, csvfile=None, delay=5, max_ping_count=10):
+
+def run_ping_diag(
+    address,
+    logger: LogManager,
+    os_type: str,
+    advanced=False,
+    csvfile=None,
+    delay=5,
+    max_ping_count=10,
+):
     """
     Esegue la diagnostica ICMP Ping in modo sicuro:
     - Valida e sanitizza address
@@ -64,13 +76,18 @@ def run_ping_diag(address, logger: LogManager, os_type: str, advanced=False, csv
 
     logger.info(f"Inizio diagnostica ping verso {address} (OS: {os_type})")
     ping3_res = None
-    pingparse_stats = {"min_rtt": "", "avg_rtt": "", "max_rtt": "", "packet_loss_rate": ""}
+    pingparse_stats = {
+        "min_rtt": "",
+        "avg_rtt": "",
+        "max_rtt": "",
+        "packet_loss_rate": "",
+    }
     scapy_times = []
 
     # Ping semplice con ping3
     if ping3_ping:
         try:
-            ping3_res = ping3_ping(address, unit='ms')
+            ping3_res = ping3_ping(address, unit="ms")
             if ping3_res is not None:
                 logger.info(f"Risultato ping3: {ping3_res:.2f} ms")
             else:
@@ -96,9 +113,13 @@ def run_ping_diag(address, logger: LogManager, os_type: str, advanced=False, csv
     if sr1 and IP and ICMP and advanced:
         for i in range(min(4, max_ping_count)):
             try:
-                pkt = IP(dst=address)/ICMP()
+                pkt = IP(dst=address) / ICMP()
                 ans = sr1(pkt, timeout=2, verbose=0)
-                if ans is not None and hasattr(ans, 'time') and hasattr(pkt, 'sent_time'):
+                if (
+                    ans is not None
+                    and hasattr(ans, "time")
+                    and hasattr(pkt, "sent_time")
+                ):
                     rtt = (ans.time - pkt.sent_time) * 1000
                     scapy_times.append(round(rtt, 2))
                 else:
@@ -113,16 +134,28 @@ def run_ping_diag(address, logger: LogManager, os_type: str, advanced=False, csv
     # Diagnostica avanzata: scrittura su CSV sicura
     if advanced and csvfile:
         header = [
-            "timestamp", "address", "ping3_ms",
-            "pingparsing_min", "pingparsing_avg", "pingparsing_max", "pingparsing_packet_loss",
-            "scapy_ping_1_ms", "scapy_ping_2_ms", "scapy_ping_3_ms", "scapy_ping_4_ms"
+            "timestamp",
+            "address",
+            "ping3_ms",
+            "pingparsing_min",
+            "pingparsing_avg",
+            "pingparsing_max",
+            "pingparsing_packet_loss",
+            "scapy_ping_1_ms",
+            "scapy_ping_2_ms",
+            "scapy_ping_3_ms",
+            "scapy_ping_4_ms",
         ]
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
         row = [
-            timestamp, address, ping3_res if ping3_res is not None else "",
-            pingparse_stats.get("min_rtt", ""), pingparse_stats.get("avg_rtt", ""),
-            pingparse_stats.get("max_rtt", ""), pingparse_stats.get("packet_loss_rate", ""),
-            *(scapy_times[i] if i < len(scapy_times) else "" for i in range(4))
+            timestamp,
+            address,
+            ping3_res if ping3_res is not None else "",
+            pingparse_stats.get("min_rtt", ""),
+            pingparse_stats.get("avg_rtt", ""),
+            pingparse_stats.get("max_rtt", ""),
+            pingparse_stats.get("packet_loss_rate", ""),
+            *(scapy_times[i] if i < len(scapy_times) else "" for i in range(4)),
         ]
         try:
             write_csv(csvfile, header, [row])

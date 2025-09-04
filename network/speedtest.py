@@ -14,6 +14,7 @@ try:
 except ImportError:
     speedtest = None
 
+
 def run_speedtest_diag(logger: LogManager, max_attempts=2):
     """
     Esegue speedtest diagnostico:
@@ -30,7 +31,7 @@ def run_speedtest_diag(logger: LogManager, max_attempts=2):
                 results = {
                     "download_bps": round(st.download(), 2),
                     "upload_bps": round(st.upload(), 2),
-                    "ping_ms": round(st.results.ping, 2)
+                    "ping_ms": round(st.results.ping, 2),
                 }
                 logger.info(f"Speedtest: {results}")
                 print(f"Download: {results['download_bps'] / 1e6:.2f} Mbps")

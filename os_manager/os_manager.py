@@ -6,9 +6,10 @@ Gestione OS:
 - API: detect_os(), require_admin_if_needed()
 """
 
-import platform
 import os
+import platform
 import sys
+
 
 class OSManager:
     def __init__(self, logger):
@@ -31,12 +32,15 @@ class OSManager:
         if os_type == "windows":
             try:
                 import ctypes
+
                 if not ctypes.windll.shell32.IsUserAnAdmin():
                     self.logger.critical("Esegui il programma come Amministratore!")
                     print("Esegui come Amministratore!")
                     sys.exit(99)
             except Exception:
-                self.logger.critical("Impossibile verificare permessi amministratore su Windows.")
+                self.logger.critical(
+                    "Impossibile verificare permessi amministratore su Windows."
+                )
                 sys.exit(99)
         elif os_type in ["linux", "macos"]:
             if hasattr(os, "geteuid") and os.geteuid() != 0:

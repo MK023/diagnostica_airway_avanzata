@@ -1,6 +1,6 @@
 # Contribuire al progetto
 
-Grazie per voler contribuire!  
+Grazie per voler contribuire!
 Questo progetto adotta best practice di sicurezza, code style e automazione.
 
 ---

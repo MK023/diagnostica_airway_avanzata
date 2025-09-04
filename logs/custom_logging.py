@@ -12,11 +12,14 @@ import logging
 import logging.handlers
 import os
 
+
 class LogManager:
     def __init__(self, config):
         log_path = config.get("logging", "file", fallback="logs/network_diag.log")
         log_level = config.get("logging", "level", fallback="INFO").upper()
-        max_bytes = config.getint("logging", "max_bytes", fallback=5*1024*1024)  # 5MB
+        max_bytes = config.getint(
+            "logging", "max_bytes", fallback=5 * 1024 * 1024
+        )  # 5MB
         backup_count = config.getint("logging", "backup_count", fallback=5)
 
         os.makedirs(os.path.dirname(log_path), exist_ok=True)
@@ -25,7 +28,9 @@ class LogManager:
         self.logger.setLevel(getattr(logging, log_level, logging.INFO))
 
         # Rollover per dimensione
-        handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=max_bytes, backupCount=backup_count)
+        handler = logging.handlers.RotatingFileHandler(
+            log_path, maxBytes=max_bytes, backupCount=backup_count
+        )
         formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)

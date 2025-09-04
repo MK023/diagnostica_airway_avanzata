@@ -16,7 +16,10 @@ try:
 except ImportError:
     traceroute = None
 
-def run_traceroute_diag(address, logger: LogManager, os_type: str, max_hops=20, timeout=2):
+
+def run_traceroute_diag(
+    address, logger: LogManager, os_type: str, max_hops=20, timeout=2
+):
     """
     Esegue diagnostica Traceroute:
     - Valida address per sicurezza
@@ -34,13 +37,17 @@ def run_traceroute_diag(address, logger: LogManager, os_type: str, max_hops=20, 
             res, _ = traceroute([address], maxttl=max_hops, timeout=timeout, verbose=0)
             hops = []
             for idx, (snd, rcv) in enumerate(res):
-                hop_ip = rcv.src if rcv else '*'
-                rtt = (rcv.time - snd.sent_time)*1000 if rcv else None
-                hops.append((hop_ip, round(rtt,2) if rtt is not None else None))
+                hop_ip = rcv.src if rcv else "*"
+                rtt = (rcv.time - snd.sent_time) * 1000 if rcv else None
+                hops.append((hop_ip, round(rtt, 2) if rtt is not None else None))
             logger.info(f"Traceroute hops: {hops}")
             print("--- Traceroute ---")
             for hop in hops:
-                print(f"{hop[0]} ({hop[1]} ms)" if hop[1] is not None else f"{hop[0]} (timeout)")
+                print(
+                    f"{hop[0]} ({hop[1]} ms)"
+                    if hop[1] is not None
+                    else f"{hop[0]} (timeout)"
+                )
         except Exception as e:
             logger.error(f"Errore traceroute: {e}", exc_info=True)
             print("ERRORE: Traceroute fallito.")

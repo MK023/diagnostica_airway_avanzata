@@ -7,13 +7,14 @@ Gestisce la user experience su terminale:
 - Integra logging e configurazione
 """
 
+from logs.custom_logging import LogManager
+from network.dns_utils import run_dns_diag
 from network.ping import run_ping_diag
-from network.traceroute import run_traceroute_diag
 from network.speedtest import run_speedtest_diag
 from network.stats import run_stats_diag
-from network.dns import run_dns_diag
+from network.traceroute import run_traceroute_diag
 from security.security import validate_address
-from logs.custom_logging import LogManager
+
 
 class CliMenu:
     def __init__(self, config, logger: LogManager, os_type: str):
@@ -39,7 +40,7 @@ class CliMenu:
             "4": "network_stats",
             "5": "dns_check",
             "6": "advanced_diag",
-            "7": "exit"
+            "7": "exit",
         }
         return mapping.get(choice, None)
 
@@ -76,6 +77,15 @@ class CliMenu:
         addr = self.get_target_address()
         if addr:
             # Parametri avanzati da config
-            filename = self.config.get("diagnostics", "csvfile", fallback="diagnostics.csv")
+            filename = self.config.get(
+                "diagnostics", "csvfile", fallback="diagnostics.csv"
+            )
             delay = self.config.getint("diagnostics", "delay", fallback=5)
-            run_ping_diag(addr, self.logger, self.os_type, advanced=True, csvfile=filename, delay=delay)
+            run_ping_diag(
+                addr,
+                self.logger,
+                self.os_type,
+                advanced=True,
+                csvfile=filename,
+                delay=delay,
+            )
