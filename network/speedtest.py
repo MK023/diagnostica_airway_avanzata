@@ -43,7 +43,7 @@ def run_speedtest_diag(logger: LogManager, max_attempts=2):
                 attempt += 1
                 print(f"ERRORE: Speedtest fallito (tentativo {attempt}).")
         if attempt == max_attempts:
-            logger.error("Speedtest non riuscito dopo tentativi massimi.")
+            logger.error("Speedtest non riuscito dopo tentativi massimi.") # type: ignore
             print("ERRORE: Speedtest non riuscito.")
     else:
         logger.error("Modulo speedtest non disponibile.")

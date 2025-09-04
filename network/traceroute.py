@@ -12,7 +12,7 @@ from logs.custom_logging import LogManager
 from security.security import validate_address
 
 try:
-    from scapy.all import traceroute
+    from scapy.all import traceroute # type: ignore
 except ImportError:
     traceroute = None
 
