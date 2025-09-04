@@ -1,5 +1,5 @@
 # tests/test_dns.py - Test coverage per network/dns.py
-import pytest
+
 
 from network.dns_utils import run_dns_diag
 
