@@ -11,6 +11,7 @@ import csv
 import os
 import time
 
+
 def write_csv(filename, header, rows, max_bytes=5 * 1024 * 1024, folder="csv_utils"):
     """
     Scrive dati su CSV in una cartella dedicata.

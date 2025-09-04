@@ -1,4 +1,3 @@
-
 """
 Modulo di diagnostica DNS sicuro e robusto.
 - Risoluzione nome, reverse, check record (A, AAAA, MX, TXT)
@@ -48,14 +47,19 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
             for rtype in rtlist:
                 try:
                     answers = resolver.resolve(address, rtype)
-                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}") # type: ignore
-                    print(f"{rtype}: {[str(a) for a in answers]}") # type: ignore
+                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}")  # type: ignore
+                    print(f"{rtype}: {[str(a) for a in answers]}")  # type: ignore
                 except dns.resolver.NXDOMAIN:
-                    logger.warning(f"Record {rtype} non trovato: il nome DNS non esiste: {address}", exc_info=False)
+                    logger.warning(
+                        f"Record {rtype} non trovato: il nome DNS non esiste: {address}",
+                        exc_info=False,
+                    )
                 except Exception as e:
                     logger.warning(f"Record {rtype} errore: {e}", exc_info=False)
         except ImportError:
-            logger.warning("Modulo dnspython non disponibile per query avanzate.", exc_info=False)
+            logger.warning(
+                "Modulo dnspython non disponibile per query avanzate.", exc_info=False
+            )
             print("ERRORE: modulo dnspython non disponibile per query avanzate.")
     except Exception as e:
         logger.error(f"Errore DNS: {e}", exc_info=False)
@@ -63,4 +67,3 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
     logger.info("Fine diagnostica DNS.")
     print("Diagnostica DNS completata.")
     logger.info("Fine diagnostica DNS.")
-    
