@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Run pre-commit checks
+        run: |
+          pre-commit install
+          pre-commit run --all-files
+
+      - name: Lint
+        run: |
+          flake8 . --count --show-source --statistics
+          black --check .
+          isort --check .
+
+      - name: Type check
+        run: mypy .
+
+      - name: Security static analysis (Bandit)
+        run: bandit -r .
+
+      - name: Dependency security audit (pip-audit)
+        run: pip-audit -r requirements.txt
+
+      - name: Run tests & coverage
+        run: |
+          coverage run -m pytest
+          coverage report
+          coverage xml
+          coverage html
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
