@@ -1,5 +1,5 @@
 # tests/test_traceroute.py - Test coverage per network/traceroute.py
-import pytest
+
 
 from network.traceroute import run_traceroute_diag
 

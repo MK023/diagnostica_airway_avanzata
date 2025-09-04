@@ -1,5 +1,5 @@
 # tests/test_speedtest.py - Test coverage per network/speedtest.py
-import pytest
+
 
 from network.speedtest import run_speedtest_diag
 
