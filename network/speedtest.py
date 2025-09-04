@@ -7,7 +7,7 @@ Modulo di diagnostica Speedtest sicuro e robusto.
 - Gestione errori granulare
 """
 
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 
 try:
     import speedtest

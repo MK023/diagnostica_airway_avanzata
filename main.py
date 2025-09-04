@@ -11,7 +11,7 @@ Gestisce il flusso principale:
 import sys
 
 from config.config_manager import ConfigManager
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 from os_manager.os_manager import OSManager
 from cli.cli import CliMenu
 

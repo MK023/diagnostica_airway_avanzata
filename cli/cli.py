@@ -13,7 +13,7 @@ from network.speedtest import run_speedtest_diag
 from network.stats import run_stats_diag
 from network.dns import run_dns_diag
 from security.security import validate_address
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 
 class CliMenu:
     def __init__(self, config, logger: LogManager, os_type: str):

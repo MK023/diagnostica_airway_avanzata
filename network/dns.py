@@ -7,7 +7,7 @@ Modulo di diagnostica DNS sicuro e robusto.
 - Gestione errori granulare
 """
 
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 from security.security import validate_address
 import socket
 

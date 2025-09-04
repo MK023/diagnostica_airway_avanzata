@@ -11,7 +11,7 @@ Modulo di diagnostica ICMP Ping sicuro e robusto.
 
 import time
 import os
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 from security.security import validate_address
 
 try:

@@ -8,7 +8,7 @@ Modulo di diagnostica Traceroute sicuro e robusto.
 - Gestione errori granulare
 """
 
-from logs.logging import LogManager
+from logs.custom_logging import LogManager
 from security.security import validate_address
 
 try:
