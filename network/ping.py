@@ -26,7 +26,7 @@ except ImportError:
     ping3_ping = None
 
 try:
-    from scapy.all import ICMP, IP, sr1 # type: ignore
+    from scapy.all import ICMP, IP, sr1  # type: ignore
 except ImportError:
     sr1 = IP = ICMP = None
 
@@ -42,7 +42,7 @@ def write_csv(csvfile, header, rows):
         raise ValueError("Path CSV non valido o potenzialmente rischioso.")
     write_header = not os.path.isfile(csvfile) or os.path.getsize(csvfile) == 0
     with open(csvfile, mode="a", newline="", encoding="utf-8") as f:
-        import csv # type: ignore
+        import csv  # type: ignore
 
         writer = csv.writer(f)
         if write_header:
@@ -104,7 +104,7 @@ def run_ping_diag(
             transmitter.count = min(max_ping_count, 10)
             stats = parser.parse(transmitter.ping()).as_dict()
             for k in pingparse_stats:
-                pingparse_stats[k] = stats.get(k, "") # type: ignore
+                pingparse_stats[k] = stats.get(k, "")  # type: ignore
             logger.info(f"Risultato pingparsing: {pingparse_stats}")
         except Exception as e:
             logger.error(f"Errore pingparsing: {e}", exc_info=True)

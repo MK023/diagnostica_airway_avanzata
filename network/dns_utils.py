@@ -48,8 +48,8 @@ def run_dns_diag(address, logger: LogManager, record_types=None, dns_timeout=3):
             for rtype in rtlist:
                 try:
                     answers = resolver.resolve(address, rtype)
-                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}") # type: ignore
-                    print(f"{rtype}: {[str(a) for a in answers]}") # type: ignore
+                    logger.info(f"Record {rtype}: {[str(a) for a in answers]}")  # type: ignore
+                    print(f"{rtype}: {[str(a) for a in answers]}")  # type: ignore
                 except Exception as e:
                     logger.warning(f"Record {rtype} non trovato: {e}", exc_info=True)
         except ImportError:
